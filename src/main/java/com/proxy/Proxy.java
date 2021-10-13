@@ -28,6 +28,7 @@ public class Proxy {
             this.ES.shutdownNow();
             // Interrumpir el proceso
             Thread.currentThread().interrupt();
+            // Terminacion anomala de la ejecución del programa
             System.exit(1);
         }
     }
