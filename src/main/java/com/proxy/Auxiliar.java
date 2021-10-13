@@ -55,6 +55,7 @@ public class Auxiliar extends Thread {
     }
 
     public Auxiliar(Socket cliente) {
+        super();
         this.cliente = cliente;
     }
 }
