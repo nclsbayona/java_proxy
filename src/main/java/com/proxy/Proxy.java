@@ -20,6 +20,7 @@ public class Proxy {
          * diferentes solicitudes, cuando llegue una solicitud, se creará un nuevo hilo,
          * en el cual se responderá a esta solicitud
          */
+        //Define la forma en la que se maneja una señal de SIGINT, es decir cuando se desea terminar el proceso por medio de ctrl+c
         Signal.handle(new Signal("INT"), // SIGINT
                 signal -> {
                     System.out.println("\nApagando proxy...");
