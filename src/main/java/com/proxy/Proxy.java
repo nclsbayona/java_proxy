@@ -23,7 +23,7 @@ public class Proxy {
         Signal.handle(new Signal("INT"), // SIGINT
                 signal -> {
                     System.out.println("\nApagando proxy...");
-                    System.out.println("Por favor espere a que las peticiones realizadas sean resueltas");
+                    System.out.println("Por favor espere a que las peticiones realizadas hasta el momento sean resueltas");
                     this.ES.shutdown();
                     System.out.println("Adios...");
                     System.exit(0);
