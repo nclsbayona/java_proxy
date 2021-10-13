@@ -1,10 +1,10 @@
 package com.proxy;
 
-import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import sun.misc.Signal;
 
 public class Proxy {
@@ -14,18 +14,38 @@ public class Proxy {
     private ServerSocket server_socket;
     private int socket_port;
 
+    private void esperarFinalizacion() {
+        // Este metodo define que no se recibiran más llamadas al proxy
+        this.ES.shutdown();
+        try {
+            // Este metodo me permite esperar la finalización de la ejecución de los
+            // diferentes hilos
+            while (!this.ES.awaitTermination(1, TimeUnit.MILLISECONDS))
+                ;
+            return;
+        } catch (InterruptedException e) {
+            // Interrumpir todo
+            this.ES.shutdownNow();
+            // Interrumpir el proceso
+            Thread.currentThread().interrupt();
+            System.exit(1);
+        }
+    }
+
     public void atenderPeticiones() {
         /*
          * Esta función tiene como objetivo llevar a cabo el proceso de escucha de las
          * diferentes solicitudes, cuando llegue una solicitud, se creará un nuevo hilo,
          * en el cual se responderá a esta solicitud
          */
-        //Define la forma en la que se maneja una señal de SIGINT, es decir cuando se desea terminar el proceso por medio de ctrl+c
+        // Define la forma en la que se maneja una señal de SIGINT, es decir cuando se
+        // desea terminar el proceso por medio de ctrl+c
         Signal.handle(new Signal("INT"), // SIGINT
                 signal -> {
                     System.out.println("\nApagando proxy...");
-                    System.out.println("Por favor espere a que las peticiones realizadas hasta el momento sean resueltas");
-                    this.ES.shutdown();
+                    System.out.println(
+                            "Por favor espere a que las peticiones realizadas hasta el momento sean resueltas");
+                    this.esperarFinalizacion();
                     System.out.println("Adios...");
                     System.exit(0);
                 });
@@ -34,15 +54,15 @@ public class Proxy {
             try {
                 // Acepto a un cliente que quiere enviarme datos, e inmediatamente redirijo esta
                 // petición a otro hilo para que el Proxy pueda seguir funcionando con
-                // normalidad
+                // normalidad. Adicionalmente
                 Socket cliente = this.server_socket.accept();
                 this.ES.execute(new Auxiliar(cliente));
-            } catch (IOException e) {
+            } catch (Exception e) {
+                System.out.println("Ocurrio \'" + e.getMessage() + "\'");
                 // TODO definir que hacer aqui (Fallo en la aceptación de la conexion)
-                System.out.println(e.getMessage());
-                // Espera a que los hilos hayan terminado su ejecución para acabar
-                this.ES.shutdown();
-                System.exit(0);
+                this.esperarFinalizacion();
+                // Terminacion anomala de la ejecución del programa
+                System.exit(1);
             }
         }
     }
