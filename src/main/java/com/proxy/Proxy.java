@@ -1,10 +1,14 @@
 package com.proxy;
 
+//Estas importaciones se realizan para manejar los sockets
 import java.net.ServerSocket;
 import java.net.Socket;
+//Estas importaciones se realizan para administrar los threads que están en ejecución
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+//Esta importación se realiza para definir un tiempo de espera para esperar a la finalización de los threads
 import java.util.concurrent.TimeUnit;
+//Esta importacion se realiza para manejar la señal de terminación del programa
 import sun.misc.Signal;
 
 public class Proxy {

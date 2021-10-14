@@ -1,6 +1,8 @@
 package com.proxy;
 
+//Estas importaciones se realizan para manejar los sockets
 import java.net.Socket;
+//Estas importaciones se realizan para poder leer el flujo de datos que se intenta enviar por el socket
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
