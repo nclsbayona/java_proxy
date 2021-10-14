@@ -35,9 +35,11 @@ public class Auxiliar extends Thread {
             // Separo la peticion para poder realizar diferentes operaciones con los datos
             String[] peticion = mensaje.split("\n");
             String[] nueva_peticion = new String[peticion.length + 2];
-            System.arraycopy(peticion[0].split(" "), 0, nueva_peticion, 0, 3);
-            System.arraycopy(peticion, 1, nueva_peticion, 3, peticion.length - 1);
+            String[] start=peticion[0].split(" ");
+            System.arraycopy(start, 0, nueva_peticion, 0, start.length);
+            System.arraycopy(peticion, 1, nueva_peticion, start.length, peticion.length - 1);
             peticion = null;
+            start=null;
             for (String s : nueva_peticion)
                 System.out.println(s);
             System.out.println();
