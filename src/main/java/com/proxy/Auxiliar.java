@@ -45,11 +45,10 @@ public class Auxiliar extends Thread {
             System.arraycopy(peticion, 1, nueva_peticion, start.length, peticion.length - 1);
             peticion = null;
             start = null;
-            /* Descomentar bloque para ver que se está separando y como
+            /* Descomentar bloque para ver que se está separando y como*/
             for (String s : nueva_peticion)
                 System.out.println(s);
             System.out.println();
-            */
             /* Ejemplos
             GET http://myblog.com/hola/vpn HTTP/1.1
             Host: myblog.com
