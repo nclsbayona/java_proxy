@@ -3,3 +3,4 @@ nb*
 .vscode*
 .idea*
 .eclipse*
+.~lock*
