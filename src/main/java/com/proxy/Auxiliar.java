@@ -5,6 +5,9 @@ import java.net.Socket;
 //Estas importaciones se realizan para poder leer el flujo de datos que se intenta enviar por el socket
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+//Estas importaciones se realizan para poder realizar las peticiones HTTP
+import java.net.URL;
+import java.net.HttpURLConnection;
 
 // Añadiendo el soporte para multi-hilos
 public class Auxiliar extends Thread {
@@ -42,9 +45,11 @@ public class Auxiliar extends Thread {
             System.arraycopy(peticion, 1, nueva_peticion, start.length, peticion.length - 1);
             peticion = null;
             start = null;
+            /* Descomentar bloque para ver que se está separando y como
             for (String s : nueva_peticion)
                 System.out.println(s);
             System.out.println();
+            */
             /* Ejemplos
             GET http://myblog.com/hola/vpn HTTP/1.1
             Host: myblog.com
