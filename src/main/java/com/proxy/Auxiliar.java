@@ -45,6 +45,13 @@ public class Auxiliar extends Thread {
             for (String s : nueva_peticion)
                 System.out.println(s);
             System.out.println();
+            /*
+             * Ejemplo de una peticion CONNECT wiki.ubuntu.com:443 HTTP/1.1 
+             * User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0
+             * Proxy-Connection: keep-alive 
+             * Connection: keep-alive 
+             * Host: wiki.ubuntu.com:443
+             */
         } catch (Exception e) {
             System.out.println(e.getMessage());
             // TODO definir que hacer aca (Error con la lectura)
