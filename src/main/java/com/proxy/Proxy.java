@@ -23,7 +23,8 @@ public class Proxy {
         this.ES.shutdown();
         try {
             // Este metodo me permite esperar la finalización de la ejecución de los
-            // diferentes hilos, aquí se está esperando y cada milisegundo revisa si ya se terminó la ejecución para poder devolver el flujo al punto de terminación
+            // diferentes hilos, aquí se está esperando y cada milisegundo revisa si ya se
+            // terminó la ejecución para poder devolver el flujo al punto de terminación
             while (!this.ES.awaitTermination(1, TimeUnit.MILLISECONDS))
                 ;
             return;
