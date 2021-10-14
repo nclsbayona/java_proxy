@@ -64,7 +64,7 @@ public class Proxy {
                 Socket cliente = this.server_socket.accept();
                 this.ES.execute(new Auxiliar(cliente));
             } catch (Exception e) {
-                System.out.println("Ocurrio \'" + e.getMessage() + "\'");
+                // Descomentar para ver que pasa System.out.println("Ocurrio \'" + e.getMessage() + "\'");
                 // TODO definir que hacer aqui (Fallo en la aceptación de la conexion)
                 this.esperarFinalizacion();
                 // Terminacion anomala de la ejecución del programa
