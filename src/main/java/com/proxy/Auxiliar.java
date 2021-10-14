@@ -29,10 +29,21 @@ public class Auxiliar extends Thread {
                 if (linea.length() == 0)
                     fin = true;
                 else
+                    // Si el mensaje no tiene nada, únicamente inserto la linea, en caso contrario
+                    // inserto un salto de linea y la linea
                     mensaje += (mensaje.length() > 0) ? "\n" + linea : linea;
             }
-            System.out.println("Servidor acaba de recibir \'" + mensaje + "\' desde: " + this.cliente.toString());
+            // Separo la peticion para poder realizar diferentes operaciones con los datos
+            String[] peticion = mensaje.split("\n");
+            String[] nueva_peticion = new String[peticion.length + 2];
+            System.arraycopy(peticion[0].split(" "), 0, nueva_peticion, 0, 3);
+            System.arraycopy(peticion, 1, nueva_peticion, 3, peticion.length - 1);
+            peticion = null;
+            for (String s : nueva_peticion)
+                System.out.println(s);
+            System.out.println();
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             // TODO definir que hacer aca (Error con la lectura)
         }
     }
@@ -40,18 +51,6 @@ public class Auxiliar extends Thread {
     @Override
     public void run() {
         this.resolverPeticion();
-    }
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof Auxiliar)) {
-            return false;
-        }
-        Auxiliar auxiliar = (Auxiliar) o;
-        return Objects.equals(cliente, auxiliar.cliente);
     }
 
     public Auxiliar(Socket cliente) {
