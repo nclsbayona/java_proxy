@@ -6,6 +6,7 @@ import java.net.Socket;
 //Estas importaciones se realizan para poder leer el flujo de datos que se intenta enviar por el socket
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.DataOutputStream;
 
 //Estas importaciones se realizan para poder realizar las peticiones HTTP
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -45,7 +46,6 @@ public class Auxiliar extends Thread {
                     // inserto un salto de linea y la linea
                     mensaje += (mensaje.length() > 0) ? "\n" + linea : linea;
             }
-            lectura.close(); // Cierro el buffer de lectura actual
             // Separo la peticion para poder realizar diferentes operaciones con los datos
             String[] peticion = mensaje.split("\n");
             String[] nueva_peticion = new String[peticion.length + 2];
@@ -54,26 +54,41 @@ public class Auxiliar extends Thread {
             System.arraycopy(peticion, 1, nueva_peticion, start.length, peticion.length - 1);
             peticion = null;
             start = null;
-            String agent = null;
-            for (String s : nueva_peticion)
-                if (s.contains("User-Agent:"))
-                    agent = s.split(" ")[2];
+            String user_agent = null;
+            for (int i = 0; user_agent == null && i < nueva_peticion.length; ++i) {
+                String s = nueva_peticion[i];
+                if (s.contains("User-Agent"))
+                    user_agent = s.split(" ")[1];
+            }
             String host = nueva_peticion[1];
             String method = nueva_peticion[0];
+            // Este es un regex para dividir el url por si tiene un puerto
+            host=host.split(":[0-9]*")[0];
             // Por si viene especificado el puerto, no tener en cuenta el puerto
-            host = host.split(":")[0];
-            System.out.println("El url web que detecto es: " + host);
             if (!host.contains("http://"))
                 host = "http://" + host;
             host.replace("https://", "http://");
+            System.out.println("El url web que detecto es: " + host);
+            if (method.toLowerCase().equals("get") || method.toLowerCase().equals("connect"))
+                mensaje=getRequest(host, user_agent);
+            else if (method.toLowerCase().equals("post"))
+                mensaje="POST missing";
+            DataOutputStream response=new DataOutputStream(this.cliente.getOutputStream());
+            System.out.println("Necesito enviar\n");
+            System.out.println(mensaje);
+            response.flush();
+            response.writeBytes(mensaje);
+            System.out.println("\nDone\n\n");
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println(e.getMessage());
             // TODO definir que hacer aca (Error con la lectura)
         }
     }
 
     // Propia de get
-    private static String makeRequest(String host, String user_agent) {
+    private static String getRequest(String host, String user_agent) {
+        // TODO Falta cambiar la version del cliente para que use http 1.0
         // Inicializo el resultado de la solicitud para devolverlo más adelante
         String result = null;
         // Inicializo la solicitud a realizar
@@ -85,14 +100,20 @@ public class Auxiliar extends Thread {
             // solicitud
             try (CloseableHttpResponse httpResponse = httpClient.execute(request);) {
                 System.out.println(httpResponse.getStatusLine().toString());
+                // Extraigo la entidad HTTP de la respuesta (La respuesta)
                 HttpEntity entity = httpResponse.getEntity();
                 Header header = entity.getContentType();
                 System.out.println(header);
+                // Si la entidad (Respuesta) no es nula, entonces convierto esta en lo que debo
+                // enviar de
+                // vuelta
                 if (entity != null)
                     result = EntityUtils.toString(entity);
             } catch (Exception e) {
-                // TODO Definir que hacer
+                // Para que no continue con el flujo normal de la función
+                return result;
             }
+
         } catch (Exception e) {
             // TODO Definir que hacer
         }
