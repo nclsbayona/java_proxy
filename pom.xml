@@ -15,7 +15,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>14</maven.compiler.source>
     <maven.compiler.target>14</maven.compiler.target>
-    <junit.version>4.13.1</junit.version>
+    <junit.version>4.13.2</junit.version>
     <hc.version>4.5.13</hc.version>
   </properties>
 
