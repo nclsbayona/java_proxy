@@ -103,7 +103,6 @@ public class Auxiliar extends Thread {
             PrintWriter escritura = new PrintWriter(
                     new BufferedWriter(new OutputStreamWriter(this.cliente.getOutputStream())), true);
             escritura.println(mensaje);
-            System.out.println("Done\n");
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println(e.getMessage());
