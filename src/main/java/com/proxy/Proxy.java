@@ -3,13 +3,21 @@ package com.proxy;
 //Estas importaciones se realizan para manejar los sockets
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
+
 //Estas importaciones se realizan para administrar los threads que están en ejecución
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
 //Esta importación se realiza para definir un tiempo de espera para esperar a la finalización de los threads
 import java.util.concurrent.TimeUnit;
+
 //Esta importacion se realiza para manejar la señal de terminación del programa
 import sun.misc.Signal;
+
+// For debugging
+import java.util.Scanner;
+
 
 public class Proxy {
     // Permite manejar la ejecucion de los hilos
@@ -62,9 +70,15 @@ public class Proxy {
                 // petición a otro hilo para que el Proxy pueda seguir funcionando con
                 // normalidad. Adicionalmente
                 Socket cliente = this.server_socket.accept();
+                try {
+                    cliente.setKeepAlive(true);
+                } catch (SocketException e) {
+                }
                 this.ES.execute(new Auxiliar(cliente));
+                //new Scanner(System.in).next();
             } catch (Exception e) {
-                // Descomentar para ver que pasa System.out.println("Ocurrio \'" + e.getMessage() + "\'");
+                // Descomentar para ver que pasa System.out.println("Ocurrio \'" +
+                // e.getMessage() + "\'");
                 // TODO definir que hacer aqui (Fallo en la aceptación de la conexion)
                 this.esperarFinalizacion();
                 // Terminacion anomala de la ejecución del programa
