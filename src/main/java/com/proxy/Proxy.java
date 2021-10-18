@@ -15,9 +15,6 @@ import java.util.concurrent.TimeUnit;
 //Esta importacion se realiza para manejar la señal de terminación del programa
 import sun.misc.Signal;
 
-// For debugging
-import java.util.Scanner;
-
 
 public class Proxy {
     // Permite manejar la ejecucion de los hilos
@@ -75,7 +72,6 @@ public class Proxy {
                 } catch (SocketException e) {
                 }
                 this.ES.execute(new Auxiliar(cliente));
-                //new Scanner(System.in).next();
             } catch (Exception e) {
                 // Descomentar para ver que pasa System.out.println("Ocurrio \'" +
                 // e.getMessage() + "\'");

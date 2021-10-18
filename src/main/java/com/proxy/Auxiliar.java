@@ -100,11 +100,6 @@ public class Auxiliar extends Thread {
                 mensaje = getRequest(host, user_agent);
             } else if (method.toLowerCase().equals("post"))
                 mensaje = "POST missing";
-            System.out.println("Peticion a: " + host);
-            System.out.println("Hasta el momento la peticion es\n");
-            for (String string : nueva_peticion)
-                System.out.println(string);
-            //System.out.println("La respuesta es\n" + mensaje);
             PrintWriter escritura = new PrintWriter(
                     new BufferedWriter(new OutputStreamWriter(this.cliente.getOutputStream())), true);
             escritura.println(mensaje);
