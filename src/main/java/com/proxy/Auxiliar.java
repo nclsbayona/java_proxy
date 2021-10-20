@@ -63,7 +63,7 @@ public class Auxiliar extends Thread {
                     mensaje += (mensaje.length() > 0) ? "\r\n" + linea : linea;
                 }
             }
-
+            System.out.println("El mensaje " + mensaje);
             // Separo la peticion para poder realizar diferentes operaciones con los datos
             String[] peticion = mensaje.split("\n");
             String[] nueva_peticion = new String[peticion.length + 2];
@@ -74,21 +74,27 @@ public class Auxiliar extends Thread {
             start = null;
             String host = nueva_peticion[1];
             String method = nueva_peticion[0];
-            System.out.println("Metodo: " + method);
             // Este es un regex para dividir el url por si tiene un puerto
-            // Por si viene especificado el puerto, no tener en cuenta el puerto
-            host = host.split(":([0-9])[0-9]*")[0];
+            /*
+             * // Por si viene especificado el puerto, no tener en cuenta el puerto host =
+             * host.split(":([0-9])[0-9]*")[0];
+             */
+            // TODO Definir tabla
             // Para verificar si es válido el url
             Pattern valid_url = Pattern.compile("((http(s?):\\/\\/)?)((www\\.)?)([^@]*)(\\.)([^@]*)(\\/(.*))*");
             Matcher compile = valid_url.matcher(host);
             if (!compile.find())
                 return;
+            /*
+            Página prueba
+            
+            */
             // Si es válido
             // Reemplazo https por http
             host.replace("https://", "http://");
             if (!host.contains("http://"))
                 host = "http://" + host;
-            if (method.toLowerCase().equals("get") || method.toLowerCase().equals("connect")) {
+            if (method.toLowerCase().equals("get")) {
                 String user_agent = null;
                 for (int i = 0; user_agent == null && i < nueva_peticion.length; ++i) {
                     String s = nueva_peticion[i];
@@ -145,7 +151,7 @@ public class Auxiliar extends Thread {
     }
 
     // Propia de post
-    private static String getRequest(String host, String user_agent, ArrayList<NameValuePair> parameters) {
+    private static String postRequest(String host, String user_agent, ArrayList<NameValuePair> parameters) {
         // TODO Falta cambiar la version del cliente para que use http/1.0
         // Inicializo el resultado de la solicitud para devolverlo más adelante
         String result = null;
