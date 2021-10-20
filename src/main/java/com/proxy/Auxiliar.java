@@ -87,7 +87,7 @@ public class Auxiliar extends Thread {
                 return;
             /*
             Página prueba
-            
+
             */
             // Si es válido
             // Reemplazo https por http
@@ -118,7 +118,6 @@ public class Auxiliar extends Thread {
 
     // Propia de get
     private static String getRequest(String host, String user_agent) {
-        // TODO Falta cambiar la version del cliente para que use http/1.0
         // Inicializo el resultado de la solicitud para devolverlo más adelante
         String result = null;
         // Inicializo la solicitud a realizar
@@ -152,7 +151,6 @@ public class Auxiliar extends Thread {
 
     // Propia de post
     private static String postRequest(String host, String user_agent, ArrayList<NameValuePair> parameters) {
-        // TODO Falta cambiar la version del cliente para que use http/1.0
         // Inicializo el resultado de la solicitud para devolverlo más adelante
         String result = null;
         // Creo una instancia de cliente http para poder realizar la solicitud
