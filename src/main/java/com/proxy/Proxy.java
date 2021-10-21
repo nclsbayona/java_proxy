@@ -1,10 +1,16 @@
 package com.proxy;
 
+//JSON
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+
 //Estas importaciones se realizan para manejar los sockets
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-
+import java.nio.file.Paths;
 //Estas importaciones se realizan para administrar los threads que están en ejecución
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -15,8 +21,11 @@ import java.util.concurrent.TimeUnit;
 //Esta importacion se realiza para manejar la señal de terminación del programa
 import sun.misc.Signal;
 
-
 public class Proxy {
+    private static final String VIRTUAL_HOSTS_FILE = "hosts.json";
+    private static final String DENIED_HOSTS_FILE = "denied.json";
+    private static HashMap<String, VirtualHost> vHosts;
+    private static HashSet<String> dPages;
     // Permite manejar la ejecucion de los hilos
     private final ExecutorService ES = Executors.newCachedThreadPool();
     private static final int PORT = 8080;
@@ -83,8 +92,37 @@ public class Proxy {
         }
     }
 
+    private static HashMap<String, VirtualHost> getVirtualHosts() {
+        HashMap<String, VirtualHost> hosts = new HashMap<>();
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            VirtualHost[] vHosts = mapper.readValue(
+                    Paths.get(Proxy.class.getResource(Proxy.VIRTUAL_HOSTS_FILE).toURI()).toFile(), VirtualHost[].class);
+            for (int i = 0; i < vHosts.length; ++i)
+                hosts.put(vHosts[i].getVirtual_host(), vHosts[i]);
+        } catch (Exception ex) {
+        }
+        return hosts;
+    }
+
+    private static HashSet<String> getDeniedPages() {
+        HashSet<String> pages = new HashSet<>();
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            Map<?, ?> map = mapper
+                    .readValue(Paths.get(Proxy.class.getResource(Proxy.DENIED_HOSTS_FILE).toURI()).toFile(), Map.class);
+            String[] s = (map.values().toArray()[0]).toString().replace("[", "").replace("]", "").split(", ");
+            for (int i = 0; i < s.length; ++i)
+                pages.add(s[i]);
+        } catch (Exception ex) {
+        }
+        return pages;
+    }
+
     public Proxy() {
         try {
+            Proxy.vHosts = Proxy.getVirtualHosts();
+            Proxy.dPages = Proxy.getDeniedPages();
             this.server_socket = new ServerSocket(Proxy.PORT);
             this.socket_port = this.server_socket.getLocalPort();
             System.out.println("El proxy está corriendo en el puerto " + this.socket_port + " TCP");
@@ -95,4 +133,10 @@ public class Proxy {
             System.exit(1);
         }
     }
+
+    @Override
+    public String toString() {
+        return "{" + " vHosts=" + vHosts.toString() + ", " + " dPages=" + dPages.toString() + "}";
+    }
+
 }

@@ -1,0 +1,12 @@
+[
+    {
+        "virtual_host": "r.paez",
+        "real_host": "sophia.javeriana.edu.co",
+        "root_directory": "~rpaez/"
+    },
+    {
+        "virtual_host": "e.ruiz",
+        "real_host": "sophia.javeriana.edu.co",
+        "root_directory": "~eruiz/"
+    }
+]

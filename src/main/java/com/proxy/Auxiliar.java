@@ -61,6 +61,7 @@ public class Auxiliar extends Thread {
                     // Si el mensaje no tiene nada, únicamente inserto la linea, en caso contrario
                     // inserto un salto de linea y la linea
                     mensaje += (mensaje.length() > 0) ? "\r\n" + linea : linea;
+                    System.out.println("Linea:" + linea);
                 }
             }
             System.out.println("El mensaje " + mensaje);
@@ -81,17 +82,17 @@ public class Auxiliar extends Thread {
              */
             // TODO Definir tabla
             // Para verificar si es válido el url
-            Pattern valid_url = Pattern.compile("((http(s?):\\/\\/)?)((www\\.)?)([^@]*)(\\.)([^@]*)(\\/(.*))*");
-            Matcher compile = valid_url.matcher(host);
-            if (!compile.find())
-                return;
             /*
-            Página prueba
-
-            */
+             * Pattern valid_url = Pattern.compile(
+             * "(((http(s?):\\/\\/)?)((www\\.)?)([^@]*)(\\.)([^@]*)(\\/(.*))*)"); Matcher
+             * compile = valid_url.matcher(host); if (!compile.find()) return;
+             */
+            /*
+             * Página prueba
+             * 
+             */
             // Si es válido
             // Reemplazo https por http
-            host.replace("https://", "http://");
             if (!host.contains("http://"))
                 host = "http://" + host;
             if (method.toLowerCase().equals("get")) {
@@ -104,8 +105,10 @@ public class Auxiliar extends Thread {
                         user_agent = s.split(" ")[1];
                 }
                 mensaje = getRequest(host, user_agent);
+
             } else if (method.toLowerCase().equals("post"))
                 mensaje = "POST missing";
+            System.out.println("El mensaje " + mensaje);
             PrintWriter escritura = new PrintWriter(
                     new BufferedWriter(new OutputStreamWriter(this.cliente.getOutputStream())), true);
             escritura.println(mensaje);
@@ -150,7 +153,7 @@ public class Auxiliar extends Thread {
     }
 
     // Propia de post
-    private static String postRequest(String host, String user_agent, ArrayList<NameValuePair> parameters) {
+    private static String postRequest(String host, ArrayList<NameValuePair> parameters) {
         // Inicializo el resultado de la solicitud para devolverlo más adelante
         String result = null;
         // Creo una instancia de cliente http para poder realizar la solicitud
