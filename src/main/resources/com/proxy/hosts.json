@@ -8,5 +8,10 @@
         "virtual_host": "e.ruiz",
         "real_host": "sophia.javeriana.edu.co",
         "root_directory": "~eruiz/"
+    },
+    {
+        "virtual_host": "mina",
+        "real_host": "www.laminaverde.com",
+        "root_directory": ""
     }
 ]

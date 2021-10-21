@@ -16,6 +16,10 @@ import java.io.PrintWriter;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
+//Guardar paginas bloqueadas y virtual hosts
+import java.util.HashMap;
+import java.util.HashSet;
+
 //Estas importaciones se realizan para poder realizar las peticiones HTTP
 //Primero aquellos usados para el GET request (Puede no ser exclusivo del GET)
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -37,6 +41,8 @@ import java.util.ArrayList;
 // Añadiendo el soporte para multi-hilos
 public class Auxiliar extends Thread {
     private Socket cliente;
+    private HashMap<String, VirtualHost> vHosts;
+    private HashSet<String> dPages;
 
     private void resolverPeticion() {
         String mensaje = "";
@@ -61,7 +67,6 @@ public class Auxiliar extends Thread {
                     // Si el mensaje no tiene nada, únicamente inserto la linea, en caso contrario
                     // inserto un salto de linea y la linea
                     mensaje += (mensaje.length() > 0) ? "\r\n" + linea : linea;
-                    System.out.println("Linea:" + linea);
                 }
             }
             System.out.println("El mensaje " + mensaje);
@@ -75,26 +80,21 @@ public class Auxiliar extends Thread {
             start = null;
             String host = nueva_peticion[1];
             String method = nueva_peticion[0];
-            // Este es un regex para dividir el url por si tiene un puerto
-            /*
-             * // Por si viene especificado el puerto, no tener en cuenta el puerto host =
-             * host.split(":([0-9])[0-9]*")[0];
-             */
-            // TODO Definir tabla
+            if (host.contains("http://"))
+                host = host.replace("http://", "");
+            if (this.vHosts.containsKey(host.replace("/", ""))) {
+                VirtualHost to_replace = this.vHosts.get(host.replace("/", ""));
+                host = to_replace.getReal_host() + "/" + to_replace.getRoot_directory();
+            }
+            if (this.dPages.contains(host.replace("/", "")))
+                return;
             // Para verificar si es válido el url
             /*
              * Pattern valid_url = Pattern.compile(
              * "(((http(s?):\\/\\/)?)((www\\.)?)([^@]*)(\\.)([^@]*)(\\/(.*))*)"); Matcher
              * compile = valid_url.matcher(host); if (!compile.find()) return;
              */
-            /*
-             * Página prueba
-             * 
-             */
             // Si es válido
-            // Reemplazo https por http
-            if (!host.contains("http://"))
-                host = "http://" + host;
             if (method.toLowerCase().equals("get")) {
                 String user_agent = null;
                 for (int i = 0; user_agent == null && i < nueva_peticion.length; ++i) {
@@ -104,11 +104,13 @@ public class Auxiliar extends Thread {
                     if (s.contains("User-Agent"))
                         user_agent = s.split(" ")[1];
                 }
+                host = host.replace("/", "");
+                host = "http://" + host;
+                System.out.println("Enviar a: " + host);
                 mensaje = getRequest(host, user_agent);
 
             } else if (method.toLowerCase().equals("post"))
                 mensaje = "POST missing";
-            System.out.println("El mensaje " + mensaje);
             PrintWriter escritura = new PrintWriter(
                     new BufferedWriter(new OutputStreamWriter(this.cliente.getOutputStream())), true);
             escritura.println(mensaje);
@@ -190,8 +192,11 @@ public class Auxiliar extends Thread {
         this.resolverPeticion();
     }
 
-    public Auxiliar(Socket cliente) {
+    public Auxiliar(Socket cliente, HashMap<String, VirtualHost> vHosts, HashSet<String> dPages) {
         super();
         this.cliente = cliente;
+        this.vHosts = vHosts;
+        this.dPages = dPages;
     }
+
 }

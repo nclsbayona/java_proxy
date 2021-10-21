@@ -80,7 +80,7 @@ public class Proxy {
                     cliente.setKeepAlive(true);
                 } catch (SocketException e) {
                 }
-                this.ES.execute(new Auxiliar(cliente));
+                this.ES.execute(new Auxiliar(cliente, Proxy.vHosts, Proxy.dPages));
             } catch (Exception e) {
                 // Descomentar para ver que pasa System.out.println("Ocurrio \'" +
                 // e.getMessage() + "\'");
