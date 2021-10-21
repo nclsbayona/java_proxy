@@ -12,10 +12,6 @@ import java.io.BufferedWriter;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
-//Estas importaciones se hacen para validar el url por medio de una expresión regular
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-
 //Guardar paginas bloqueadas y virtual hosts
 import java.util.HashMap;
 import java.util.HashSet;
