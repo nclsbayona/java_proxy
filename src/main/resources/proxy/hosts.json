@@ -13,5 +13,10 @@
         "virtual_host": "mina",
         "real_host": "www.laminaverde.com",
         "root_directory": ""
+    },
+    {
+        "virtual_host": "forma",
+        "real_host": "www.httpbin.org.com",
+        "root_directory": "forms/post"
     }
 ]

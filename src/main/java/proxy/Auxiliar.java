@@ -30,6 +30,7 @@ import org.apache.http.Header;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 
 //Importo ArrayList para poder guardar los parametros de un post request
 import java.util.ArrayList;
@@ -75,21 +76,31 @@ public class Auxiliar extends Thread {
             start = null;
             String host = nueva_peticion[1];
             String method = nueva_peticion[0];
-            // TODO Leer datos del POST
-            logDebugMessage("El cliente en " + this.cliente.getInetAddress().getHostAddress() + ":"
+            logWarnMessage("El cliente en " + this.cliente.getInetAddress().getCanonicalHostName().toString() + ":"
                     + this.cliente.getPort() + " intenta que se lleve a cabo " + mensaje);
             if (host.contains("http://"))
                 host = host.replace("http://", "");
-            if (this.vHosts.containsKey(host.replace("/", ""))) {
-                VirtualHost to_replace = this.vHosts.get(host.replace("/", ""));
+            if (this.vHosts.containsKey(host.split("/")[0])) {
+                VirtualHost to_replace = this.vHosts.get(host.split("/")[0]);
+                logWarnMessage("El cliente en " + this.cliente.getInetAddress().getCanonicalHostName().toString() + ":"
+                        + this.cliente.getPort() + " quiere acceder a " + to_replace.getReal_host() + "/"
+                        + to_replace.getRoot_directory());
                 host = to_replace.getReal_host() + "/" + to_replace.getRoot_directory();
-                if (!host.endsWith("/"))
-                    host += "/";
             }
-            if (this.dPages.contains(host.replace("/", ""))) {
-                logErrorMessage(
-                        "El cliente en " + this.cliente.getInetAddress().getHostAddress() + ":" + this.cliente.getPort()
-                                + " intenta que se lleve a cabo una solicitud al host prohibido " + host);
+            fin = false;
+            for (int i = 0; i < this.dPages.size() && !fin; ++i) {
+                String h = (String) this.dPages.toArray()[i];
+                System.out.println("Comparo " + host.split("/")[0] + " con " + h + ":" + h.equals(host.split("/")[0]));
+                if (h.equals(host.split("/")[0])) {
+                    fin = true;
+                    System.out.println("Ok");
+                }
+            }
+
+            if (fin) {
+                logErrorMessage("El cliente en " + this.cliente.getInetAddress().getAddress().toString() + ":"
+                        + this.cliente.getPort() + " intenta que se lleve a cabo una solicitud al host prohibido "
+                        + host);
                 return;
             }
             // Si es válido
@@ -104,12 +115,20 @@ public class Auxiliar extends Thread {
                     if (s.contains("User-Agent"))
                         user_agent = s.split(" ")[1];
                 }
-                System.out.println("Enviar a: " + host);
                 mensaje = getRequest(host, user_agent);
 
-            } else if (method.toLowerCase().equals("post"))
-                mensaje = "POST missing";
-            logInfoMessage("La respuesta tras ejecutar una solicitud de tipo " + method + " dirigida al host " + host+"es:\n"+mensaje+"\n");
+            } else if (method.toLowerCase().equals("post")) {
+                linea = lectura.readLine();
+                nueva_peticion = linea.split("&&");
+                ArrayList<NameValuePair> arrayList = new ArrayList<>();
+                for (int i = 0; i < nueva_peticion.length; ++i) {
+                    String[] params = nueva_peticion[i].split("=");
+                    arrayList.add(new BasicNameValuePair(params[0], params[1]));
+                }
+                mensaje=postRequest(host, arrayList);
+            }
+            logInfoMessage("La respuesta tras ejecutar una solicitud de tipo " + method + " dirigida al host " + host
+                    + " es:\n" + mensaje + "\n");
             PrintWriter escritura = new PrintWriter(
                     new BufferedWriter(new OutputStreamWriter(this.cliente.getOutputStream())), true);
             escritura.println(mensaje);
