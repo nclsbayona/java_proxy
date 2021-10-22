@@ -65,7 +65,6 @@ public class Auxiliar extends Thread {
                     mensaje += (mensaje.length() > 0) ? "\r\n" + linea : linea;
                 }
             }
-            System.out.println("El mensaje " + mensaje);
             // Separo la peticion para poder realizar diferentes operaciones con los datos
             String[] peticion = mensaje.split("\n");
             String[] nueva_peticion = new String[peticion.length + 2];
@@ -76,17 +75,26 @@ public class Auxiliar extends Thread {
             start = null;
             String host = nueva_peticion[1];
             String method = nueva_peticion[0];
+            // TODO Leer datos del POST
+            logDebugMessage("El cliente en " + this.cliente.getInetAddress().getHostAddress() + ":"
+                    + this.cliente.getPort() + " intenta que se lleve a cabo " + mensaje);
             if (host.contains("http://"))
                 host = host.replace("http://", "");
-            host = host.replace("/", "");
-            if (this.vHosts.containsKey(host)) {
-                VirtualHost to_replace = this.vHosts.get(host);
+            if (this.vHosts.containsKey(host.replace("/", ""))) {
+                VirtualHost to_replace = this.vHosts.get(host.replace("/", ""));
                 host = to_replace.getReal_host() + "/" + to_replace.getRoot_directory();
+                if (!host.endsWith("/"))
+                    host += "/";
             }
-            if (this.dPages.contains(host))
+            if (this.dPages.contains(host.replace("/", ""))) {
+                logErrorMessage(
+                        "El cliente en " + this.cliente.getInetAddress().getHostAddress() + ":" + this.cliente.getPort()
+                                + " intenta que se lleve a cabo una solicitud al host prohibido " + host);
                 return;
+            }
             // Si es válido
             host = "http://" + host;
+            logWarnMessage("Se va a ejecutar una solicitud " + method + " dirigida al host " + host);
             if (method.toLowerCase().equals("get")) {
                 String user_agent = null;
                 for (int i = 0; user_agent == null && i < nueva_peticion.length; ++i) {
@@ -101,6 +109,7 @@ public class Auxiliar extends Thread {
 
             } else if (method.toLowerCase().equals("post"))
                 mensaje = "POST missing";
+            logInfoMessage("La respuesta tras ejecutar una solicitud de tipo " + method + " dirigida al host " + host+"es:\n"+mensaje+"\n");
             PrintWriter escritura = new PrintWriter(
                     new BufferedWriter(new OutputStreamWriter(this.cliente.getOutputStream())), true);
             escritura.println(mensaje);
@@ -126,10 +135,6 @@ public class Auxiliar extends Thread {
 
     public static void logDebugMessage(String message) {
         Proxy.getLogger().debug(message);
-    }
-
-    public static void logTraceMessage(String message) {
-        Proxy.getLogger().trace(message);
     }
 
     // Propia de get
