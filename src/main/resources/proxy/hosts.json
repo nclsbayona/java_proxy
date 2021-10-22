@@ -16,7 +16,7 @@
     },
     {
         "virtual_host": "forma",
-        "real_host": "www.httpbin.org.com",
+        "real_host": "www.httpbin.org",
         "root_directory": "forms/post"
     }
 ]
