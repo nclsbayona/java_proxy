@@ -83,7 +83,7 @@
           <artifactId>exec-maven-plugin</artifactId>
           <version>${maven_exec.version}</version>
           <configuration>
-            <mainClass>com.proxy.RunProxy</mainClass>
+            <mainClass>proxy.RunProxy</mainClass>
           </configuration>
         </plugin>
       </plugins>
