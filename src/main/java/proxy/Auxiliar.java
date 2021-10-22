@@ -52,7 +52,7 @@ public class Auxiliar extends Thread {
         try {
             BufferedReader lectura = new BufferedReader(new InputStreamReader(this.cliente.getInputStream()));
             boolean fin = false;
-            while (!fin || lectura.read()!=-1) {
+            while (!fin) {
                 // Leo todas las lineas del mensaje que intenta enviar el cliente
                 linea = lectura.readLine();
                 // Si la linea está vacia, no la meto en el mensaje y ya acabe, en caso

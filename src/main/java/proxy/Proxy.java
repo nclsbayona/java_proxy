@@ -28,7 +28,7 @@ import sun.misc.Signal;
 public class Proxy {
     // Para generar logs (Mensajes de estado)
     final static Logger logger = LoggerFactory.getLogger(Proxy.class);
-    //Para los host virtuales
+    // Para los host virtuales
     private static final String VIRTUAL_HOSTS_FILE = "hosts.json";
     private static final String DENIED_HOSTS_FILE = "denied.json";
     private static HashMap<String, VirtualHost> vHosts;
@@ -43,7 +43,7 @@ public class Proxy {
         return Proxy.logger;
     }
 
-    //Estos métodos me permiten generar logs, tanto en un archivo como en stdout
+    // Estos métodos me permiten generar logs, tanto en un archivo como en stdout
     public static void logWarnMessage(String message) {
         Proxy.getLogger().warn(message);
     }
