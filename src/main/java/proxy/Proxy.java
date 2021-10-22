@@ -1,4 +1,4 @@
-package com.proxy;
+package proxy;
 
 //Logger
 import org.slf4j.Logger;

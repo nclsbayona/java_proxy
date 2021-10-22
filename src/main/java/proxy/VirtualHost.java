@@ -1,4 +1,4 @@
-package com.proxy;
+package proxy;
 
 import java.util.Objects;
 

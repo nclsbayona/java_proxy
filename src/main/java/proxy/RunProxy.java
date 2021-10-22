@@ -1,4 +1,4 @@
-package com.proxy;
+package proxy;
 
 public class RunProxy {
     public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package com.proxy;
+package proxy;
 
 //Estas importaciones se realizan para manejar los sockets
 import java.net.Socket;
