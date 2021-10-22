@@ -52,7 +52,7 @@ public class Auxiliar extends Thread {
         try {
             BufferedReader lectura = new BufferedReader(new InputStreamReader(this.cliente.getInputStream()));
             boolean fin = false;
-            while (!fin) {
+            while (!fin || lectura.read()!=-1) {
                 // Leo todas las lineas del mensaje que intenta enviar el cliente
                 linea = lectura.readLine();
                 // Si la linea está vacia, no la meto en el mensaje y ya acabe, en caso
@@ -78,19 +78,15 @@ public class Auxiliar extends Thread {
             String method = nueva_peticion[0];
             if (host.contains("http://"))
                 host = host.replace("http://", "");
-            if (this.vHosts.containsKey(host.replace("/", ""))) {
-                VirtualHost to_replace = this.vHosts.get(host.replace("/", ""));
+            host = host.replace("/", "");
+            if (this.vHosts.containsKey(host)) {
+                VirtualHost to_replace = this.vHosts.get(host);
                 host = to_replace.getReal_host() + "/" + to_replace.getRoot_directory();
             }
-            if (this.dPages.contains(host.replace("/", "")))
+            if (this.dPages.contains(host))
                 return;
-            // Para verificar si es válido el url
-            /*
-             * Pattern valid_url = Pattern.compile(
-             * "(((http(s?):\\/\\/)?)((www\\.)?)([^@]*)(\\.)([^@]*)(\\/(.*))*)"); Matcher
-             * compile = valid_url.matcher(host); if (!compile.find()) return;
-             */
             // Si es válido
+            host = "http://" + host;
             if (method.toLowerCase().equals("get")) {
                 String user_agent = null;
                 for (int i = 0; user_agent == null && i < nueva_peticion.length; ++i) {
@@ -100,8 +96,6 @@ public class Auxiliar extends Thread {
                     if (s.contains("User-Agent"))
                         user_agent = s.split(" ")[1];
                 }
-                host = host.replace("/", "");
-                host = "http://" + host;
                 System.out.println("Enviar a: " + host);
                 mensaje = getRequest(host, user_agent);
 
