@@ -111,6 +111,27 @@ public class Auxiliar extends Thread {
         }
     }
 
+    // Estos métodos me permiten generar logs, tanto en un archivo como en stdout
+    public static void logWarnMessage(String message) {
+        Proxy.getLogger().warn(message);
+    }
+
+    public static void logInfoMessage(String message) {
+        Proxy.getLogger().info(message);
+    }
+
+    public static void logErrorMessage(String message) {
+        Proxy.getLogger().error(message);
+    }
+
+    public static void logDebugMessage(String message) {
+        Proxy.getLogger().debug(message);
+    }
+
+    public static void logTraceMessage(String message) {
+        Proxy.getLogger().trace(message);
+    }
+
     // Propia de get
     private static String getRequest(String host, String user_agent) {
         // Inicializo el resultado de la solicitud para devolverlo más adelante

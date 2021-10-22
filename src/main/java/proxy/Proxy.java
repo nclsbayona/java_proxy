@@ -39,29 +39,9 @@ public class Proxy {
     private ServerSocket server_socket;
     private int socket_port;
 
+    // Estos métodos me permiten generar logs, tanto en un archivo como en stdout
     public static Logger getLogger() {
         return Proxy.logger;
-    }
-
-    // Estos métodos me permiten generar logs, tanto en un archivo como en stdout
-    public static void logWarnMessage(String message) {
-        Proxy.getLogger().warn(message);
-    }
-
-    public static void logInfoMessage(String message) {
-        Proxy.getLogger().info(message);
-    }
-
-    public static void logErrorMessage(String message) {
-        Proxy.getLogger().error(message);
-    }
-
-    public static void logDebugMessage(String message) {
-        Proxy.getLogger().debug(message);
-    }
-
-    public static void logTraceMessage(String message) {
-        Proxy.getLogger().trace(message);
     }
 
     private void esperarFinalizacion() {
