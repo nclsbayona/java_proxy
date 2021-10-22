@@ -25,7 +25,6 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.HttpEntity;
-import org.apache.http.Header;
 //Posteriormente aquellos usados únicamente para el POST
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
@@ -125,7 +124,7 @@ public class Auxiliar extends Thread {
                     String[] params = nueva_peticion[i].split("=");
                     arrayList.add(new BasicNameValuePair(params[0], params[1]));
                 }
-                mensaje=postRequest(host, arrayList);
+                mensaje = postRequest(host, arrayList);
             }
             logInfoMessage("La respuesta tras ejecutar una solicitud de tipo " + method + " dirigida al host " + host
                     + " es:\n" + mensaje + "\n");
@@ -133,9 +132,7 @@ public class Auxiliar extends Thread {
                     new BufferedWriter(new OutputStreamWriter(this.cliente.getOutputStream())), true);
             escritura.println(mensaje);
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println(e.getMessage());
-            // TODO definir que hacer aca (Error con la lectura o escritura)
+            logErrorMessage("Ocurrio \'" + e.getMessage() + "\'");
         }
     }
 
@@ -168,11 +165,12 @@ public class Auxiliar extends Thread {
             // Creo una instancia de respuesta http para guardar el resultado de la
             // solicitud
             try (CloseableHttpResponse httpResponse = httpClient.execute(request);) {
-                // Extraigo el estado de la petición
-                String status = httpResponse.getStatusLine().toString();
+                /*
+                 * // Extraigo el estado de la petición String status =
+                 * httpResponse.getStatusLine().toString();
+                 */
                 // Extraigo la entidad HTTP de la respuesta (La respuesta)
                 HttpEntity entity = httpResponse.getEntity();
-                Header headers = entity.getContentType();
                 // Si la entidad (Respuesta) no es nula, entonces convierto esta en lo que debo
                 // enviar de
                 // vuelta
@@ -184,7 +182,7 @@ public class Auxiliar extends Thread {
             }
 
         } catch (Exception e) {
-            // TODO Definir que hacer
+            logErrorMessage("Ocurrio \'" + e.getMessage() + "\'");
         }
         return result;
     }
@@ -201,11 +199,12 @@ public class Auxiliar extends Thread {
             // Creo una instancia de respuesta http para guardar el resultado de la
             // solicitud
             try (CloseableHttpResponse httpResponse = httpClient.execute(request);) {
-                // Extraigo el estado de la petición
-                String status = httpResponse.getStatusLine().toString();
+                /*
+                 * // Extraigo el estado de la petición String status =
+                 * httpResponse.getStatusLine().toString();
+                 */
                 // Extraigo la entidad HTTP de la respuesta (La respuesta)
                 HttpEntity entity = httpResponse.getEntity();
-                Header headers = entity.getContentType();
                 // Si la entidad (Respuesta) no es nula, entonces convierto esta en lo que debo
                 // enviar de
                 // vuelta
@@ -217,7 +216,7 @@ public class Auxiliar extends Thread {
             }
 
         } catch (Exception e) {
-            // TODO Definir que hacer
+            logErrorMessage("Ocurrio \'" + e.getMessage() + "\'");
         }
         return result;
     }

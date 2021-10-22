@@ -51,10 +51,11 @@ public class Proxy {
             // Este metodo me permite esperar la finalización de la ejecución de los
             // diferentes hilos, aquí se está esperando y cada milisegundo revisa si ya se
             // terminó la ejecución para poder devolver el flujo al punto de terminación
-            while (!this.ES.awaitTermination(1, TimeUnit.MILLISECONDS))
-                ;
+            if (!this.ES.awaitTermination(10, TimeUnit.SECONDS))
+
+                throw new Exception("No apaga");
             return;
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             // Interrumpir todo
             this.ES.shutdownNow();
             // Interrumpir el proceso
@@ -94,9 +95,7 @@ public class Proxy {
                 }
                 this.ES.execute(new Auxiliar(cliente, Proxy.vHosts, Proxy.dPages));
             } catch (Exception e) {
-                // Descomentar para ver que pasa System.out.println("Ocurrio \'" +
-                // e.getMessage() + "\'");
-                // TODO definir que hacer aqui (Fallo en la aceptación de la conexion)
+                getLogger().error("Ocurrio \'" + e.getMessage() + "\'");
                 this.esperarFinalizacion();
                 // Terminacion anomala de la ejecución del programa
                 System.exit(1);
