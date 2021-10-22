@@ -1,5 +1,9 @@
 package com.proxy;
 
+//Logger
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 //JSON
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
@@ -22,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 import sun.misc.Signal;
 
 public class Proxy {
+    final static Logger logger = LoggerFactory.getLogger(Proxy.class);
     private static final String VIRTUAL_HOSTS_FILE = "hosts.json";
     private static final String DENIED_HOSTS_FILE = "denied.json";
     private static HashMap<String, VirtualHost> vHosts;
@@ -31,6 +36,30 @@ public class Proxy {
     private static final int PORT = 8080;
     private ServerSocket server_socket;
     private int socket_port;
+
+    public static Logger getLogger() {
+        return Proxy.logger;
+    }
+
+    public static void logWarnMessage(String message) {
+        Proxy.getLogger().warn(message);
+    }
+
+    public static void logInfoMessage(String message) {
+        Proxy.getLogger().info(message);
+    }
+
+    public static void logErrorMessage(String message) {
+        Proxy.getLogger().error(message);
+    }
+
+    public static void logDebugMessage(String message) {
+        Proxy.getLogger().debug(message);
+    }
+
+    public static void logTraceMessage(String message) {
+        Proxy.getLogger().trace(message);
+    }
 
     private void esperarFinalizacion() {
         // Este metodo define que no se recibiran más llamadas al proxy
