@@ -4,7 +4,7 @@ package com.proxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//JSON
+//Estas son importaciones para manejar los diferentes 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,7 +26,9 @@ import java.util.concurrent.TimeUnit;
 import sun.misc.Signal;
 
 public class Proxy {
+    // Para generar logs (Mensajes de estado)
     final static Logger logger = LoggerFactory.getLogger(Proxy.class);
+    //Para los host virtuales
     private static final String VIRTUAL_HOSTS_FILE = "hosts.json";
     private static final String DENIED_HOSTS_FILE = "denied.json";
     private static HashMap<String, VirtualHost> vHosts;
@@ -41,6 +43,7 @@ public class Proxy {
         return Proxy.logger;
     }
 
+    //Estos métodos me permiten generar logs, tanto en un archivo como en stdout
     public static void logWarnMessage(String message) {
         Proxy.getLogger().warn(message);
     }
