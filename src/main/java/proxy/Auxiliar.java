@@ -75,29 +75,41 @@ public class Auxiliar extends Thread {
             start = null;
             String host = nueva_peticion[1];
             String method = nueva_peticion[0];
-            logWarnMessage("El cliente en " + this.cliente.getInetAddress().getCanonicalHostName().toString() + ":"
-                    + this.cliente.getPort() + " intenta que se lleve a cabo " + mensaje);
+            logWarnMessage("El cliente en " + this.cliente.getLocalSocketAddress().toString() + ":"
+                    + this.cliente.getPort() + " intenta que se lleve a cabo\n" + mensaje + '\n');
+
             if (host.contains("http://"))
                 host = host.replace("http://", "");
-            if (this.vHosts.containsKey(host.split("/")[0])) {
-                VirtualHost to_replace = this.vHosts.get(host.split("/")[0]);
-                logWarnMessage("El cliente en " + this.cliente.getInetAddress().getCanonicalHostName().toString() + ":"
-                        + this.cliente.getPort() + " quiere acceder a " + to_replace.getReal_host() + "/"
-                        + to_replace.getRoot_directory());
-                host = to_replace.getReal_host() + "/" + to_replace.getRoot_directory();
-            }
+
             fin = false;
-            for (int i = 0; i < this.dPages.size() && !fin; ++i) {
-                String h = (String) this.dPages.toArray()[i];
-                System.out.println("Comparo " + host.split("/")[0] + " con " + h + ":" + h.equals(host.split("/")[0]));
-                if (h.equals(host.split("/")[0])) {
+            for (int i = 0; i < this.vHosts.size() && !fin; ++i) {
+                String h = (String) this.vHosts.keySet().toArray()[i];
+                if (host.split("/")[0].equals(h))
                     fin = true;
-                    System.out.println("Ok");
-                }
             }
 
             if (fin) {
-                logErrorMessage("El cliente en " + this.cliente.getInetAddress().getAddress().toString() + ":"
+                VirtualHost to_replace = this.vHosts.get(host.split("/")[0]);
+                logWarnMessage("El cliente en " + this.cliente.getLocalSocketAddress().toString() + ":"
+                        + this.cliente.getPort() + " quiere acceder a " + to_replace.getReal_host() + "/"
+                        + to_replace.getRoot_directory());
+                String r = to_replace.getReal_host() + "/" + to_replace.getRoot_directory();
+                host = host.replace(host.split("/")[0], r);
+                host = host.replaceFirst("/", "");
+            }
+
+            fin = false;
+            for (int i = 0; i < this.dPages.size() && !fin; ++i) {
+                String h = (String) this.dPages.toArray()[i];
+
+                System.out.println("Aqui comparo " + host + " con " + h);
+                if (host.split("/")[0].equals(h))
+                    fin = true;
+                System.out.println("Aqui fin es " + fin + "\n");
+            }
+
+            if (fin) {
+                logErrorMessage("El cliente en " + this.cliente.getInetAddress().getHostAddress().toString() + ":"
                         + this.cliente.getPort() + " intenta que se lleve a cabo una solicitud al host prohibido "
                         + host);
                 return;
@@ -127,11 +139,12 @@ public class Auxiliar extends Thread {
                 mensaje = postRequest(host, arrayList);
             }
             logInfoMessage("La respuesta tras ejecutar una solicitud de tipo " + method + " dirigida al host " + host
-                    + " es:\n" + mensaje + "\n");
+                    + " es:\n" + mensaje + "\n\n");
             PrintWriter escritura = new PrintWriter(
                     new BufferedWriter(new OutputStreamWriter(this.cliente.getOutputStream())), true);
             escritura.println(mensaje);
         } catch (Exception e) {
+            e.printStackTrace();
             logErrorMessage("Ocurrio \'" + e.getMessage() + "\'");
         }
     }
