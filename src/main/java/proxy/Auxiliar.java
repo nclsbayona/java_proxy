@@ -100,11 +100,8 @@ public class Auxiliar extends Thread {
             fin = false;
             for (int i = 0; i < this.dPages.size() && !fin; ++i) {
                 String h = (String) this.dPages.toArray()[i];
-
-                System.out.println("Aqui comparo " + host.split("/")[0] + " con " + h);
                 if (host.split("/")[0].equals(h))
                     fin = true;
-                System.out.println("Aqui fin es " + fin + "\n");
             }
 
             if (fin) {
