@@ -2,12 +2,12 @@
     {
         "virtual_host": "r.paez",
         "real_host": "sophia.javeriana.edu.co",
-        "root_directory": "~rpaez/"
+        "root_directory": "~rpaez"
     },
     {
         "virtual_host": "e.ruiz",
         "real_host": "sophia.javeriana.edu.co",
-        "root_directory": "~eruiz/"
+        "root_directory": "~eruiz"
     },
     {
         "virtual_host": "mina",
@@ -15,8 +15,18 @@
         "root_directory": ""
     },
     {
-        "virtual_host": "forma",
+        "virtual_host": "bin",
         "real_host": "www.httpbin.org",
-        "root_directory": "forms/post/"
+        "root_directory": ""
+    },
+    {
+        "virtual_host": "goku",
+        "real_host": "vozenred.com",
+        "root_directory": "assets/images/notas/244216goku.jpg"
+    },
+    {
+        "virtual_host": "gohan",
+        "real_host": "descargarimagenesdegoku.com",
+        "root_directory": "wp-content/uploads/2017/01/parejas-de-dragon-ball-z-y-gt-para-san-valentin-400x352.jpg"
     }
 ]

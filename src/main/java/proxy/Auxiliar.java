@@ -95,14 +95,13 @@ public class Auxiliar extends Thread {
                         + to_replace.getRoot_directory());
                 String r = to_replace.getReal_host() + "/" + to_replace.getRoot_directory();
                 host = host.replace(host.split("/")[0], r);
-                host = host.replaceFirst("/", "");
             }
 
             fin = false;
             for (int i = 0; i < this.dPages.size() && !fin; ++i) {
                 String h = (String) this.dPages.toArray()[i];
 
-                System.out.println("Aqui comparo " + host + " con " + h);
+                System.out.println("Aqui comparo " + host.split("/")[0] + " con " + h);
                 if (host.split("/")[0].equals(h))
                     fin = true;
                 System.out.println("Aqui fin es " + fin + "\n");
@@ -114,6 +113,9 @@ public class Auxiliar extends Thread {
                         + host);
                 return;
             }
+            //Formato para la entrada
+            if (host.endsWith("//"))
+                host=host.replaceFirst("/$", "");
             // Si es válido
             host = "http://" + host;
             logWarnMessage("Se va a ejecutar una solicitud " + method + " dirigida al host " + host);
