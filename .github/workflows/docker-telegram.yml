@@ -15,7 +15,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
           tags: latest, v${{ github.RUN_NUMBER }}
-          repository: ${{ github.repository }}/built_image
+          repository: ${{ github.repository }}/my_java_proxy_image
 
       - name: Publish to Docker Hub
         uses: docker/build-push-action@releases/v1
