@@ -18,7 +18,7 @@
     <maven_exec.version>3.0.0</maven_exec.version>
     <slf4j.version>2.0.0-alpha5</slf4j.version>
     <junit.version>4.13.2</junit.version>
-    <jackson.version>2.13.0</jackson.version>
+    <jackson.version>2.13.3</jackson.version>
     <hc.version>4.5.13</hc.version>
   </properties>
 
