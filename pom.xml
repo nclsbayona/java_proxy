@@ -14,7 +14,7 @@
     <maven_exec.version>3.0.0</maven_exec.version>
     <maven.compiler.source>14</maven.compiler.source>
     <maven.compiler.target>14</maven.compiler.target>
-    <maven_compiler.version>3.8.1</maven_compiler.version>
+    <maven_compiler.version>3.11.0</maven_compiler.version>
     <maven_exec.version>3.0.0</maven_exec.version>
     <slf4j.version>2.0.0-alpha5</slf4j.version>
     <junit.version>4.13.2</junit.version>
